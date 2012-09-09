@@ -21,7 +21,7 @@ class Company(models.Model):
 	symbol = models.CharField(max_length=5)
 	market = models.ForeignKey(Market)
 	trading_currency = models.ForeignKey(Currency)
-	isin = models.CharField(max_length=20)
+	isin = models.CharField(max_length=20, null=True)
 
 	def __unicode__(self):
 		return "%s (%s)" % (self.full_name, self.symbol)

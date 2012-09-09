@@ -12,6 +12,23 @@ CUR_REF = {
 	'HUF' : 'Hungarian Francs',
 	'DKK' : 'Monnaie de raciste',
 }
+
+def load_all_symbols_from_nasdaq():
+	"""
+	"Symbol","Name","LastSale","MarketCap","ADR TSO","IPOyear","Sector","industry","Summary Quote",
+	"FLWS","1-800 FLOWERS.COM, Inc.","3.8899","252021513.5613","n/a","1999","Consumer Services","Other Specialty Stores","http://www.nasdaq.com/symbol/flws",
+	"""
+	flux = DictReader(open('companylist.csv'), delimiter=",")
+	for line in flux:
+		trading_currency = Currency.objects.get(symbol="USD")
+		market, created = Market.objects.get_or_create(
+			name = "Nasdaq")
+		symbol, created = Company.objects.get_or_create(
+			full_name = line['Name'],
+			symbol = line['Symbol'],
+			market = market,
+			trading_currency = trading_currency)
+
 def load_all_symbols():
 	"""
 	{'Volume': '2144', 
