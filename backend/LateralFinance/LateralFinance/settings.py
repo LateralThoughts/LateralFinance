@@ -119,6 +119,7 @@ INSTALLED_APPS = (
     'api',
     'south',
     'haystack',
+    'pyzen',
 )
 
 HAYSTACK_CONNECTIONS = {

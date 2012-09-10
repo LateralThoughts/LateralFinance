@@ -23,11 +23,20 @@ class Company(models.Model):
 	trading_currency = models.ForeignKey(Currency)
 	isin = models.CharField(max_length=20, null=True)
 
+	def to_dict(self):
+		company = self
+		return {
+				'id' : company.pk,
+				'symbol' : company.symbol,
+				'name' : company.full_name,
+				'currency' : company.trading_currency.symbol,
+				'market' : company.market.name,
+			}
 	def __unicode__(self):
 		return "%s (%s)" % (self.full_name, self.symbol)
 
 class Quote(models.Model):
-	company = models.ForeignKey(Company)
+	company = models.ForeignKey(Company, related_name="quotes")
 	created_at = models.DateField()
 	open = models.FloatField()
 	high = models.FloatField()

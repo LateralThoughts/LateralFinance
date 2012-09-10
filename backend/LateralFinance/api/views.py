@@ -1,19 +1,14 @@
 from django.http import HttpResponse
 from models import Company
 import json
+from django.shortcuts import get_object_or_404
 
 def home(request):
 	""" Index page """
 	companies = Company.objects.all()
 	return HttpResponse(
 		json.dumps(
-			[{
-				'id' : company.pk,
-				'symbol' : company.symbol,
-				'name' : company.full_name,
-				'currency' : company.trading_currency.symbol,
-				'market' : company.market.name,
-			} for company in companies]
+			[company.to_dict() for company in companies]
 		), mimetype="application/json")
 
 
@@ -27,3 +22,30 @@ def autocomplete(request):
 				'pk' : result.object.pk,
 			} for result in results]
 		), mimetype="application/json")
+
+
+def quotes(request):
+	""" Returns Quotes on a period until today """
+	requested_id = request.GET.get('id', None)
+	company = get_object_or_404(Company, pk=requested_id)
+	quotes = company.quotes.all()
+	if len(quotes) == 0:
+		try:
+			from api.utils import load_data_from_company
+			quotes = load_data_from_company(company)
+		except Exception, e:
+			print e
+	return HttpResponse(json.dumps(
+    		{
+    			'company' : company.to_dict(),
+    			'quotes' : [{
+    				'id' : quote.pk,
+    				'date' : str(quote.created_at),
+    				'open' : quote.open,
+    				'high' : quote.high,
+    				'low' : quote.low,
+    				'close' : quote.close,
+    				'volume' : quote.volume
+    			} for quote in quotes],
+    		}
+    	), mimetype="application/json")

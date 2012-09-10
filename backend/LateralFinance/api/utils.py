@@ -69,10 +69,11 @@ def load_data_from_company(company):
 	Date,Open,High,Low,Close,Volume,Adj Close
 	2012-09-07,678.05,682.48,675.77,680.44,11756500,680.44
 	"""
-	url =YAHOO_URL % company.symbol
+	url =YAHOO_URL % (company.symbol + ".PA")
 	print "URL : %s" % url
 	data = requests.get(url)
 	flux = DictReader(data.content.split("\n"), delimiter=",")
+	quotes = []
 	index = 0
 	for line in flux:
 		index += 1
@@ -86,20 +87,6 @@ def load_data_from_company(company):
 		quote.low = line['Low']
 		quote.close = line['Adj Close']
 		quote.volume = line['Volume']
-
 		quote.save()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		quotes.append(quote)
+	return quotes
