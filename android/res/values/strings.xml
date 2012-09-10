@@ -1,0 +1,9 @@
+<resources>
+
+    <string name="app_name">LateralFinance</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="quote_detail">Quote detail</string>
+
+</resources>
