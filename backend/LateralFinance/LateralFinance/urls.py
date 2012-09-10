@@ -5,5 +5,6 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', 'api.views.home', name='home'),
+    url(r'^search/?$', 'api.views.autocomplete', name='autocomplete'),
     url(r'^admin/', include(admin.site.urls)),
 )

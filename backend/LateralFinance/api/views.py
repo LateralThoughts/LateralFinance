@@ -15,3 +15,15 @@ def home(request):
 				'market' : company.market.name,
 			} for company in companies]
 		), mimetype="application/json")
+
+
+def autocomplete(request):
+	from haystack.query import SearchQuerySet as sqs
+	results = sqs().autocomplete(content_auto = request.GET.get('q', None))
+	return HttpResponse(json.dumps(
+			[{
+				'text' : result.text,
+				'symbol' : result.symbol,
+				'pk' : result.object.pk,
+			} for result in results]
+		), mimetype="application/json")
